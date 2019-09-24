@@ -16,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="css/normalize.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
-
+    <link rel="stylesheet" type="text/css" href="css/responsive.css">
 </head>
 <title>Runbug - View Events</title>
 <body>
@@ -30,35 +30,77 @@
               '.$eventMSG.'
             </div>';
             if (($key = array_search($_SESSION['eventMSG'], $_SESSION)) !== false) {
-                                    unset($_SESSION[$key]);
+//                                    unset($_SESSION[$key]);
                                 }
         }
 ?>
-        <div class="slideshow">
-            <style>
-                .slideshow{
-                    background-image: url(img/<?PHP print($img) ?>);
-                }
-            </style>
-        </div>
         <main class="wrapper">
-
-        <div class="section group">
+            <div class="wrapper">
+                <div id="openFilter" onclick="openFilter()">OPEN FILTER</div>
+                
+                <div id="filter">
+                    <div id="filterContent">
+                    <div id="closeFilter" onclick="closeFilter()">CLOSE FILTER</div>
+                    <form>
+                        <ul>
+                            <div>
+                                
+                                <input id="txtField" type="text" name="search" placeholder="Search . . ." onkeyup="textSearch()">
+                            </div>
+                            <div id="dateField">
+                                <span class="dateButton" id="eventsRecent" onclick="dateSearch('recent')">Recent</span>
+                                <span class="dateButton" id="eventsUpcoming" onclick="dateSearch('upcoming')">Upcoming</span>
+                            </div>
+                            <div>LOCATION <br>
+                            <input checked type="checkbox" onchange="locationSearch('Auckland')" value="1"> Auckland <br>
+                            <input checked type="checkbox" onchange="locationSearch('Northland')" value="2"> Northland <br>
+                            <input checked type="checkbox" onchange="locationSearch('Waikato')" value="Waikato"> Waikato <br>
+                            </div>
+                        </ul>
+                        <script>
+                        
+                        
+                        
+                        </script>
+                    </form>
+                    </div>
+                </div>
+        <div id="testing" class="section group">
+            <div class="col span_2_of_3 title">
+                <h1>
+                    
+                </h1>
+            </div>
            <div class="col span_1_of_3">
-
- <?php echo $para1; ?>
+<?PHP 
+   if(isset($_GET["recent"])) {
+        echo $para2;
+    } else {
+        echo $para1;
+   }            
+?>
             </div>  
             <br>
-            <div class="wrapper">
+            
             <?php   
                     //searches database for members that meet the prerequisites of the search
+                    $isRecentWhere = ">";
+                    $isRecentOrder = "ASC";
+                    if(isset($_GET["recent"])) {
+                        $isRecentWhere = "<";
+                        $isRecentOrder = "DESC";
+                    } else {
+                        $isRecentWhere = ">";
+                        $isRecentOrder = "ASC";
+                    }
                     $sql = "SELECT *
                     FROM `events`
                     INNER JOIN users
                     ON events.entered_user = users.id
                     INNER JOIN primarylocation ON events.firstLocation = primarylocation.id
                     INNER JOIN secondarylocation ON events.secondLocation = secondarylocation.id
-                    INNER JOIN tertiarylocation ON events.thirdLocation = tertiarylocation.id";
+                    INNER JOIN tertiarylocation ON events.thirdLocation = tertiarylocation.id
+                    ORDER BY date ".$isRecentOrder."";
                     $result = $conn->query($sql);
                     
                     //outputs all students that meets the prerequisites of the search
@@ -124,7 +166,7 @@
                                 if (($key = array_search($newFav, $favEvents)) !== false) {
                                     unset($favEvents[$key]);
                                 }
-                                    $newFavs = implode(",", $currentUsers);
+                                    $newFavs = implode(",", $favEvents);
                                     $sqlUnFav = "UPDATE users
                                     SET fav='".$newFavs."'
                                     WHERE id=".$userID."";
@@ -154,9 +196,12 @@
                             header("Location:favourites.php");                           
                         }
                     
-                            echo '<ul>';
+                            echo '<ul id="allEvents">';
                             // output data of each row
                             while($row = $result->fetch_assoc()) {
+                                date_default_timezone_set("Australia/Sydney");
+                                $date = date("d-m-Y", strtotime($row["date"]));
+                                $date = str_replace('-', '/', $date );
                                 $part = $row["entered_user"];
                                 $part_arr = explode (",", $part);
                                 $newEntered = "FAILED";
@@ -164,14 +209,14 @@
                                 $counter = 1;
                                 echo '
                                 <!-- Button to open the modal login form -->
-                                <li class="gallery col span_1_of_3">
+                                <li class="gallery col span_1_of_3 '.$row["location1"].'">
                                     <div onclick="openWholeEvent(\'id0'.$row["event_id"].'\', event, \'a'.$row["event_id"].'\')">
-                                        <img src="uploads/'.$row["img"].'" class="gal_img">
-                                        <p>'.$row["title"].'</p>
-                                    </div>    
+                                        <img src="uploads/'.$row["img"].'" class="gal_img" width="100%" height="140">
+                                        <div class="desc"><p class="eventName">'.$row["title"].'</p><p class="eventDate"> '.$date.'</p></div>
+                                    </div>
                                 </li>
                                 <!-- The Modal -->
-                                <div id="id0'.$row["event_id"].'" class="modal event-modal">
+                                <div id="id0'.$row["event_id"].'" class="modal event-modal ">
                                 <div class="modal_info">
                                     <!-- Tab links -->
                                     <div class="tab">
@@ -184,7 +229,12 @@
                                     <div id="a'.$row["event_id"].'" class="tabcontent">
                                       <h3>Title: '.$row["title"].'</h3>
                                       <p>Location: '.$row["location1"].', '.$row["location2"].', '.$row["location3"].'</p>
-                                      <p>Extra Info: '.$row["info"].'</p>';
+                                      <p>Extra Info: '.$row["info"].'</p>
+                                      <p>Date (dd-mm-yyyy): ';
+                                        if($row["date"] < date("Y-m-d")) {
+                                            echo "ITS ALREADY HAPPENED";
+                                        } else {
+                                            echo $date;} echo '</p>';
                                 
                                                 
   
