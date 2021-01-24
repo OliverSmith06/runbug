@@ -36,11 +36,12 @@
 ?>
         <main class="wrapper">
             <div class="wrapper">
-                <div id="openFilter" onclick="openFilter()">OPEN FILTER</div>
-                
+<!--                <div id="openFilter" onclick="openFilter()">Open filter <i class="arrow right"></i></div>-->
+                <div id="filterButton" onclick="closeFilter()"><i class="arrow left"></i><i class="arrow left"></i></div>
                 <div id="filter">
                     <div id="filterContent">
-                    <div id="closeFilter" onclick="closeFilter()">CLOSE FILTER</div>
+<!--                    <div id="closeFilter" onclick="closeFilter()"><i class="arrow left"></i><i class="arrow left"></i>Close filter</div>-->
+                        
                     <form>
                         <ul>
                             <div>
@@ -48,13 +49,27 @@
                                 <input id="txtField" type="text" name="search" placeholder="Search . . ." onkeyup="textSearch()">
                             </div>
                             <div id="dateField">
+                                <span class="dateButton selected" id="eventsAll" onclick="dateSearch('all')">All</span>
                                 <span class="dateButton" id="eventsRecent" onclick="dateSearch('recent')">Recent</span>
                                 <span class="dateButton" id="eventsUpcoming" onclick="dateSearch('upcoming')">Upcoming</span>
+                                
                             </div>
-                            <div>LOCATION <br>
-                            <input checked type="checkbox" onchange="locationSearch('Auckland')" value="1"> Auckland <br>
-                            <input checked type="checkbox" onchange="locationSearch('Northland')" value="2"> Northland <br>
-                            <input checked type="checkbox" onchange="locationSearch('Waikato')" value="Waikato"> Waikato <br>
+                            <div>
+                                <div id="location">
+                                    Location
+                                </div>
+                                <label class="locationContainer"> Auckland
+                                    <input checked type="checkbox" onchange="locationSearch('Auckland')" value="1">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="locationContainer"> Northland
+                                    <input checked type="checkbox" onchange="locationSearch('Northland')" value="2">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="locationContainer"> Waikato
+                                    <input checked type="checkbox" onchange="locationSearch('Waikato')" value="Waikato">
+                                    <span class="checkmark"></span>
+                                </label>
                             </div>
                         </ul>
                         <script>
@@ -65,20 +80,18 @@
                     </form>
                     </div>
                 </div>
+                
         <div id="testing" class="section group">
+<!--
             <div class="col span_2_of_3 title">
-                <h1>
-                    
-                </h1>
+
             </div>
-           <div class="col span_1_of_3">
-<?PHP 
-   if(isset($_GET["recent"])) {
-        echo $para2;
-    } else {
-        echo $para1;
-   }            
-?>
+-->
+           <div class="col span_3_of_3">
+                <h1  class="pageHeading" >
+                    Events
+                </h1>
+               <div class="headingUnderline"></div>
             </div>  
             <br>
             
@@ -320,6 +333,7 @@
         </main>
 
         <footer>
+            
 <script>
 
 </script>

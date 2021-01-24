@@ -1,0 +1,180 @@
+                <script>
+                    function closeModal(id) {
+                        document.getElementById(id).style.display='block';
+
+                        function setup(modalId){
+                            window.onclick = function(event) {
+                                if (event.target == modalId) {
+                                    modalId.style.display = "none";
+                                }
+                            }
+                        }
+                        var id2 =document.getElementById(id);
+                        setup(id2)    
+                    }
+                    
+                    function openModal(id) {
+                        document.getElementById(id).style.display='none';
+                    }
+                    
+                    function openEvent(evt, eventName) {
+                      // Declare all variables
+                      var i, tabcontent, tablinks;
+
+                      // Get all elements with class="tabcontent" and hide them
+                      tabcontent = document.getElementsByClassName("tabcontent");
+                      for (i = 0; i < tabcontent.length; i++) {
+                        tabcontent[i].style.display = "none";
+                      }
+
+                      // Get all elements with class="tablinks" and remove the class "active"
+                      tablinks = document.getElementsByClassName("tablinks");
+                      for (i = 0; i < tablinks.length; i++) {
+                        tablinks[i].className = tablinks[i].className.replace(" active", "");
+                      }
+
+                      // Show the current tab, and add an "active" class to the button that opened the tab
+                      document.getElementById(eventName).style.display = "block";
+                      evt.currentTarget.className += " active";
+                    }
+                    
+                    function openWholeEvent(id, evt, eventName) {
+                        closeModal(id);
+                        openEvent(evt, eventName);
+                    }
+//                    SIDENAV
+                    /* Set the width of the side navigation to 250px */
+                    function openNav() {
+                      document.getElementById("mySidenav").style.width = "250px";
+                    }
+
+                    /* Set the width of the side navigation to 0 */
+                    function closeNav() {
+                      document.getElementById("mySidenav").style.width = "0";
+                    }
+                    
+                    function closeFilter() {
+                        document.getElementById("filter").style.width = "0px";
+                        document.getElementById("testing").style.marginLeft = "0px";
+//                        document.getElementById("openFilter").style.display = "block";
+//                        document.getElementById("filterButton").onclick = openFilter();
+                        var a, x;
+                        x = document.getElementById("filterButton");
+                        a = document.getElementsByTagName("i"); 
+                        x.setAttribute( "onclick", "openFilter();" );
+                        a[0].classList.remove("left");
+                        a[1].classList.remove("left");
+                        a[0].classList.add("arrow", "right");
+                        a[1].classList.add("arrow", "right");
+                        x.style.left = "0";
+//                        document.getElementsByClassName("wrapper").style.backgroundColor = "red";
+//                        document.getElementById("testing").style.marginLeft = "0px";
+                    }
+                    
+                    function openFilter() {
+                     document.getElementById("filter").style.width = "370px";
+                        document.getElementById("testing").style.marginLeft = "250px";
+//                     document.getElementById("openFilter").style.display = "none";
+                        var a, x;
+                        x = document.getElementById("filterButton");
+                        a = document.getElementsByTagName("i"); 
+                        x.setAttribute( "onclick", "closeFilter();" );
+                        a[0].classList.remove("right");
+                        a[1].classList.remove("right");
+                        a[0].classList.add("arrow", "left");
+                        a[1].classList.add("arrow", "left");
+                        x.removeAttribute("style");
+                    }
+                    
+                    function filterToggle() {
+                        document.getElementById("filter").toggle.width = "0";
+                    }
+                    
+                    
+                    
+                     function textSearch() {
+                                      // Declare variables
+                                      var input, filter, ul, li, a, i, txtValue;
+                                      input = document.getElementById('txtField');
+                                      filter = input.value.toUpperCase();
+                                      ul = document.getElementById("allEvents");
+                                      li = ul.getElementsByTagName('li');
+
+                                      // Loop through all list items, and hide those who don't match the search query
+                                      for (i = 0; i < li.length; i++) {
+                                        a = li[i].getElementsByClassName("eventName")[0];
+                                        txtValue = a.innerText;
+                                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                          li[i].style.display = "";
+                                        } else {
+                                          li[i].style.display = "none";
+                                        }
+                                      }
+                                    }
+                    
+                    function dateSearch(str) {
+                            var recentDiv, upcomingDiv, operators;
+                                recentDiv = document.getElementById("eventsRecent");
+                            upcomingDiv = document.getElementById("eventsUpcoming");
+                            allDiv = document.getElementById("eventsAll");
+                             var d = new Date();
+                                var currentDate;
+                                currentDate = d.getTime();
+                                ul = document.getElementById("allEvents");
+                                li = ul.getElementsByTagName("li");
+                                for (i = 0; i < li.length; i++) {
+                                        a = li[i].getElementsByClassName("eventDate")[0];
+                                        txtValue = a.innerText;
+                                          var date = txtValue.split("/");
+                                          var eventDate = new Date(date[2], date[1], date[0]);
+                                        eventDateEpoch = eventDate.getTime();
+                                        
+                                        //IN THE PAST
+                                        if (currentDate < eventDateEpoch) {
+                                            if (str == "recent"){
+                                                li[i].classList.add("hidden");
+                                                recentDiv.classList.add("selected");
+                                                allDiv.classList.remove("selected");
+                                            } else if (str == "upcoming"){
+                                                li[i].classList.remove("hidden");
+                                                recentDiv.classList.remove("selected");
+                                                allDiv.classList.remove("selected");
+                                                
+                                            } else {
+                                                li[i].classList.remove("hidden");
+                                                recentDiv.classList.remove("selected");
+                                                allDiv.classList.add("selected");
+                                            }
+                                            
+                                            
+                                        } else {
+                                            if (str == "recent") {
+                                            li[i].classList.remove("hidden");
+                                            upcomingDiv.classList.remove("selected");
+                                            } else if (str == "upcoming") {
+                                                li[i].classList.add("hidden");
+                                                upcomingDiv.classList.add("selected");
+                                            } else {
+                                                li[i].classList.remove("hidden");
+                                                upcomingDiv.classList.remove("selected");
+                                            }
+                                        }
+                                }
+                    }
+                        
+                    
+                    function locationSearch(str) {
+                        var ul, li;
+                        ul = document.getElementById("allEvents");
+                        li = ul.getElementsByTagName("li");
+                        for (i = 0; i < li.length; i++) { 
+                            if(li[i].classList.contains(""+str)) {
+                                li[i].classList.toggle("hidden");
+                               } 
+                        
+                        }
+                    }
+                
+                </script>
+              
+<p>Oliver Smith</p>

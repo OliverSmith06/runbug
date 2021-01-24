@@ -1,0 +1,44 @@
+@media screen and (min-width: 660px) {
+    #nav {
+        display: inline-block;
+    }
+    
+    #sidebutton {
+        display: none;
+    }
+    
+    .page-title {
+        font-size: 2em;
+/*        width: 10%;*/
+        padding-right: 20px;
+    }
+    
+/*
+    #logo {
+        text-align: center;
+    }
+*/
+    
+    .banner {
+        left: 0;
+        top: 0;
+        display: inline;
+        float: left;
+        position: absolute;
+        z-index: 100;
+        background-color: #454545;
+        height: 50px;
+    }
+    
+    #loginContent {
+    width: 40%;
+    }
+    
+    div.modal_info {
+        width: 28%;
+    }
+    
+    .span_1_of_3 {
+	width: 32.2%;
+}
+}
